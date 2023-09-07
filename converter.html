@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?
+family=Bree+Serif&family=Open+Sans:ital,wght@1,500&family=Oswald:wght@300&family
+=Poppins:ital,wght@1,800&family=Roboto:wght@300&family=Ubuntu&display=swap" rel="stylesheet">
+
+<head>
+    <title> OUR Tic Tac Toe</title>
+    <style>
+        body {
+            background-color: rgb(247, 247, 247);
+            font-family: 'Poppins', sans-serif;
+            display: grid;
+            grid-template-columns: repeat(400px, 1fr);
+
+        }
+        .logo img{ height: 70px;
+        width: 70px;}
+         
+        .ash{ text-align: center;
+            background-color: #000;
+            color: rgb(132, 89, 235);
+        }
+        .board {
+            justify-content: center;
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 5px;
+            text-align: center;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            font-size: 50px;
+            border: 2px solid #000;
+            cursor: pointer;
+        }
+
+        .cell:hover {
+            background-color: aquamarine;
+            color: #000;
+        }
+
+        .line {
+            position: absolute;
+            width: 8px;
+            background-color: red;
+        }
+        .hello{
+            font-size: 1.9rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <Div class="logo">
+        <img src="ashimm.jpg" alt="logo">
+    </Div>
+    <h1 class="ash"> Our Tic Tac Toe</h1>
+    <div class="board" id="board">
+        <div class="cell" onclick="makeMove(0)"></div>
+        <div class="cell" onclick="makeMove(1)"></div>
+        <div class="cell" onclick="makeMove(2)"></div>
+        <div class="cell" onclick="makeMove(3)"></div>
+        <div class="cell" onclick="makeMove(4)"></div>
+        <div class="cell" onclick="makeMove(5)"></div>
+        <div class="cell" onclick="makeMove(6)"></div>
+        <div class="cell" onclick="makeMove(7)"></div>
+        <div class="cell" onclick="makeMove(8)"></div>
+    </div>
+    <p id="message"></p>
+    <div class="line" id="horizontal-line"></div>
+    <div class="line" id="vertical-line"></div>
+    <div class="line" id="diagonal-line1"></div>
+    <div class="line" id="diagonal-line2"></div>
+    <div class="hello"> copyright &copy; A games.in</div>
+    <script>
+        let currentPlayer = 'X';
+        let board = ['', '', '', '', '', '', '', '', ''];
+        let gameOver = false;
+        let winCombo = null;
+
+        const winPatterns = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        function makeMove(cell) {
+            if (!gameOver && board[cell] === '') {
+                board[cell] = currentPlayer;
+                document.getElementById('board').children[cell].innerText = currentPlayer;
+                checkWin();
+                currentPlayer = (currentPlayer === 'X') ? 'O' : 'X';
+            }
+        }
+
+        function checkWin() {
+            for (const pattern of winPatterns) {
+                const [a, b, c] = pattern;
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    document.getElementById('message').innerText = `Player ${currentPlayer} wins!`;
+                    winCombo = pattern;
+                    displayWinningLine();
+                    gameOver = true;
+                }
+            }
+
+            if (!board.includes('') && !gameOver) {
+                document.getElementById('message').innerText = "It's a draw!";
+                gameOver = true;
+            }
+        }
+
+        function displayWinningLine() {
+            if (winCombo) {
+                const [a, b, c] = winCombo;
+                const cellElements = document.getElementById('board').children;
+
+                // Calculate line position
+                const line = document.getElementById('horizontal-line');
+                if (a <= 2) {
+                    // Horizontal line
+                    line.style.top = cellElements[a].offsetTop - 4 + 'px';
+                    line.style.left = cellElements[a].offsetLeft - 4 + 'px';
+                    line.style.width = '308px'; // Adjust as needed
+                    line.style.height = '8px';
+                } else if (a <= 5) {
+                    // Vertical line
+                    line.style.top = cellElements[a].offsetTop - 4 + 'px';
+                    line.style.left = cellElements[a].offsetLeft + 48 + 'px';
+                    line.style.width = '8px';
+                    line.style.height = '308px'; // Adjust as needed
+                } else if (a === 0) {
+                    // Diagonal line from top-left to bottom-right
+                    line.style.top = cellElements[a].offsetTop - 4 + 'px';
+                    line.style.left = cellElements[a].offsetLeft - 4 + 'px';
+                    line.style.width = '308px'; // Adjust as needed
+                    line.style.height = '8px';
+                    line.style.transform = 'rotate(45deg)';
+                } else {
+                    // Diagonal line from top-right to bottom-left
+                    line.style.top = cellElements[a].offsetTop - 4 + 'px';
+                    line.style.left = cellElements[a].offsetLeft - 4 + 'px';
+                    line.style.width = '308px'; // Adjust as needed
+                    line.style.height = '8px';
+                    line.style.transform = 'rotate(-45deg)';
+                }
+
+                line.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+
+</html>
